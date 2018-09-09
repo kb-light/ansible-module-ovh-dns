@@ -137,7 +137,7 @@ records:
 
 try:
     import ovh
-    # from ovh.exceptions import APIError
+    from ovh.exceptions import APIError
     HAS_OVH = True
 except ImportError:
     HAS_OVH = False
@@ -331,27 +331,39 @@ def main():
         fieldType=module.params.get('fieldtype'),
         subDomain=module.params.get('subdomain'),
     )
-    records = get_records(conn, searchParam)
+    try:
+        records = get_records(conn, searchParam)
+    except APIError as error:
+        module.fail_json(msg=str(error))
 
     # match records by target
     match, noMatch, missing = match_records(records, 'target', module.params.get('target'))
 
     changed = False
     if state == 'absent':
-        changed = delete_records(module, conn, match) or changed
+        try:
+            changed = delete_records(module, conn, match) or changed
+        except APIError as error:
+            module.fail_json(msg=str(error))
 
     elif state == 'present':
         newRecords = gen_records(module, missing)
-        changed = add_records(module, conn, newRecords) or changed
-        if module.params.get('ttl'):
-            changed = update_records_ttl(module, conn, match) or changed
+        try:
+            changed = add_records(module, conn, newRecords) or changed
+            if module.params.get('ttl'):
+                changed = update_records_ttl(module, conn, match) or changed
+        except APIError as error:
+            module.fail_json(msg=str(error))
 
     elif state == 'get':
         module.exit_json(records=match, changed=changed)
 
     # refresh zone if records have changed
     if changed:
-        refresh_zone(module, conn)
+        try:
+            refresh_zone(module, conn)
+        except APIError as error:
+            module.fail_json(msg=str(error))
 
     # done, exit
     module.exit_json(changed=changed, records=records)
