@@ -52,6 +52,49 @@ options:
 '''
 
 EXAMPLES = '''
+# add www.example.com as an A record
+- ovh_dns:
+    zonename: example.com
+    subdomain: www
+    target: 192.0.2.1
+
+# add two additional IPs to www.example.com, with absolute subdomain
+- ovh_dns:
+    zonename: example.com
+    subdomain: www.example.com.
+    target:
+        - 192.0.2.2
+        - 192.0.2.3
+
+# update ttl of www.example.com and set API key via environment variables
+- ovh_dns:
+    zonename: example.com
+    subdomain: www
+    target:
+        - 192.0.2.1
+        - 192.0.2.2
+        - 192.0.2.3
+    ttl: 3600
+  environment:
+    OVH_ENDPOINT: "{{ ovh_endpoint }}"
+    OVH_APPLICATION_KEY: "{{ ovh_application_key }}"
+    OVH_APPLICATION_SECRET: "{{ ovh_application_secret }}"
+    OVH_CONSUMER_KEY: "{{ ovh_consumer_key }}"
+
+# remove TXT record 'hello world' from mail01.example.com
+- ovh_dns:
+    state: absent
+    zonename: example.com
+    fieldtype: TXT
+    subdomain: mail01
+    target: hello world
+
+# get all AAAA records for www.example.com
+- ovh_dns:
+    state: get
+    zonename: example.com
+    fieldtype: AAAA
+    subdomain: www
 '''
 
 RETURN = '''
