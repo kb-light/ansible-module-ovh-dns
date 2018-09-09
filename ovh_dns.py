@@ -198,6 +198,7 @@ def get_records(conn, searchParam):
     return records
 
 
+# delete records
 def delete_records(module, conn, records):
     if records == []:
         return False
@@ -213,6 +214,7 @@ def delete_records(module, conn, records):
     return True
 
 
+# generate records based on target values
 def gen_records(module, target):
     records = []
     record = dict(
@@ -231,6 +233,7 @@ def gen_records(module, target):
     return records
 
 
+# add records
 def add_records(module, conn, records):
     if records == []:
         return False
@@ -258,6 +261,7 @@ def add_records(module, conn, records):
     return True
 
 
+# update records
 def update_records(module, conn, records):
     if records == []:
         return False
@@ -276,6 +280,7 @@ def update_records(module, conn, records):
     return True
 
 
+# function to update ttl value
 def update_records_ttl(module, conn, records):
     ttl = module.params.get('ttl')
     updateRecords = []
@@ -290,6 +295,7 @@ def update_records_ttl(module, conn, records):
     return update_records(module, conn, updateRecords)
 
 
+# refresh the domain zone
 def refresh_zone(module, conn):
     conn.post('/domain/zone/{0}/refresh'.format(module.params.get('zonename')))
 
