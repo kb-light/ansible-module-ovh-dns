@@ -98,6 +98,41 @@ EXAMPLES = '''
 '''
 
 RETURN = '''
+records:
+  description: returns specified resource records
+  returned: when state is 'get'
+  type: complex
+  contains:
+    fieldType:
+      description: record type
+      returned: always
+      type: string
+      sample: A
+    id:
+      description: record ID
+      returned: always
+      type: int
+      sample: 12345678
+    subDomain:
+      description: record subdomain
+      returned: always
+      type: string
+      sample: www.example.com.
+    target:
+      description: record value
+      returned: always
+      type: string
+      sample: 192.0.2.1
+    ttl:
+      description: record ttl
+      returned: always
+      type: int
+      sample: 0
+    zone:
+      description: zone name
+      returned: always
+      type: string
+      sample: example.com
 '''
 
 try:
