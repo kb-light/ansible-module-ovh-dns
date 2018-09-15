@@ -219,7 +219,7 @@ def gen_records(module, target):
     records = []
     record = dict(
         zone=module.params.get('zonename'),
-        fieldType=module.params.get('filetype'),
+        fieldType=module.params.get('fieldtype'),
         subDomain=module.params.get('subdomain')
     )
 
